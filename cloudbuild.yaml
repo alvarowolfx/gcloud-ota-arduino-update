@@ -1,0 +1,8 @@
+steps:
+- name: 'sglahn/platformio-core:latest'  
+  dir: firmware
+  args: ['run']  
+artifacts: 
+  objects: 
+    location: 'gs://$PROJECT_ID-firmwares/$TAG_NAME'
+    paths: ['/workspace/firmware/.pioenvs/esp32/firmware_esp32.bin','/workspace/firmware/.pioenvs/esp8266/firmware_esp8266.bin']
