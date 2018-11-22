@@ -172,6 +172,8 @@ void setup()
 {
   Serial.begin(115200);
   Serial.setDebugOutput(true);  
+  pinMode(LED_BUILTIN, OUTPUT);
+
   delay(3000);
   Serial.println("\n Starting");
   // Setup Wifi Manager
@@ -180,7 +182,7 @@ void setup()
   
   WiFiManager wm;
   WiFiManagerParameter versionText(version.c_str());
-  wm.addParameter(&versionText);  
+  wm.addParameter(&versionText);    
     
   if (!wm.autoConnect()) {
     Serial.println("failed to connect and hit timeout");
@@ -208,8 +210,21 @@ void setup()
   USE_SERIAL.println(WiFi.localIP());
 }
 
+int ledState = LOW;
+const long interval = 1000;
+unsigned long previousMillis = 0;
+
 void loop()
 {
+
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= interval) {    
+    previousMillis = currentMillis;
+    ledState = ledState == LOW ? HIGH : LOW;
+    digitalWrite( BUILTIN_LED, ledState );
+  }
+  
   // Just chill
   server.handleClient();
 }
