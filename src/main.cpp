@@ -21,7 +21,6 @@
 #define CURRENT_VERSION VERSION
 #define CLOUD_FUNCTION_URL "http://us-central1-gcloud-ota-update.cloudfunctions.net/getDownloadUrl"
 
-WiFiManager wifiManager;
 WiFiClient client;
 WebServer server(80);
 
@@ -55,6 +54,8 @@ String getDownloadUrl()
       String payload = http.getString();
       USE_SERIAL.println(payload);
       downloadUrl = payload;
+    } else {
+      USE_SERIAL.println("Device is up to date!");
     }
   }
   else
@@ -165,12 +166,24 @@ void handleRoot() {
 
 void setup()
 {
+  Serial.begin(115200);
+  Serial.setDebugOutput(true);  
+  delay(3000);
+  Serial.println("\n Starting");
   // Setup Wifi Manager
   String version = String("<p>Current Version - v") + String(CURRENT_VERSION) + String("</p>");
+  USE_SERIAL.println(version);
+  
+  WiFiManager wm;
   WiFiManagerParameter versionText(version.c_str());
-  wifiManager.addParameter(&versionText);
-  wifiManager.autoConnect();
-
+  wm.addParameter(&versionText);  
+    
+  if (!wm.autoConnect()) {
+    Serial.println("failed to connect and hit timeout");
+    //reset and try again, or maybe put it to deep sleep
+    ESP.restart();
+    delay(1000);
+  }
  
   // Check if we need to download a new version
   String downloadUrl = getDownloadUrl();
