@@ -3,7 +3,7 @@
 #include <DNSServer.h>
 #if defined(ESP8266)
 #include <ESP8266WebServer.h>
-#include <ESP8266Wifi.h>
+#include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #define VARIANT "esp8266"
 #else
@@ -117,15 +117,18 @@ bool downloadUpdate(String url)
             {
               USE_SERIAL.println("Update successfully completed. Rebooting.");
               ESP.restart();
+              return true;
             }
             else
             {
               USE_SERIAL.println("Update not finished? Something went wrong!");
+              return false;
             }
           }
           else
           {
             USE_SERIAL.println("Error Occurred. Error #: " + String(Update.getError()));
+            return false;
           }
         }
         else
