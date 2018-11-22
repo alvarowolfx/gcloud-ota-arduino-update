@@ -1,6 +1,6 @@
 steps:
 - name: 'sglahn/platformio-core:latest'  
-  dir: firmware
+  dir: .
   args: ['run']  
 artifacts: 
   objects: 

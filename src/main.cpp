@@ -5,11 +5,13 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266Wifi.h>
 #include <ESP8266HTTPClient.h>
+#define VARIANT "esp8266"
 #else
 #include <WebServer.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Update.h>
+#define VARIANT "esp32"
 #endif
 
 #include <WiFiManager.h>
@@ -32,7 +34,9 @@ String getDownloadUrl()
   String downloadUrl;
   USE_SERIAL.print("[HTTP] begin...\n");
 
-  String url = CLOUD_FUNCTION_URL + String("?version=") + CURRENT_VERSION;
+  String url = CLOUD_FUNCTION_URL;
+  url += String("?version=") + CURRENT_VERSION;
+  url += String("&variant=") + VARIANT;
   http.begin(url);
 
   USE_SERIAL.print("[HTTP] GET...\n");
