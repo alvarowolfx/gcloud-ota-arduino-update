@@ -22,7 +22,11 @@
 #define CLOUD_FUNCTION_URL "http://us-central1-gcloud-ota-update.cloudfunctions.net/getDownloadUrl"
 
 WiFiClient client;
+#if defined(ESP8266)
+ESP8266WebServer server(80);
+#else
 WebServer server(80);
+#endif
 
 /* 
  * Check if needs to update the device and returns the download url.
