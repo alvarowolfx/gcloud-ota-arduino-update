@@ -43,11 +43,12 @@ Blog post with details: https://medium.com/google-cloud/serverless-continuous-in
 
 ### Upload firmware with PlatfomIO
 
-I recommend installing the Visual Studio Code (VSCode) IDE and the PlatformIO plugin to get started using it. Just follow the step on the link below: 
+I recommend installing the Visual Studio Code (VSCode) IDE and the PlatformIO plugin to get started using it. Just follow the step on the link below:
 
 https://platformio.org/platformio-ide
 
 To deploy to the board you can use the “Build” and “Upload” buttons on PlatformIO Toolbar.
+
 
 
 ### References
