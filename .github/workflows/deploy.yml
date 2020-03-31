@@ -17,3 +17,8 @@ jobs:
         pip install platformio
     - name: Run PlatformIO
       run: platformio run
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: firmware_esp32.bin
+        path: .pio/build/esp32/firmware_esp32.bin
