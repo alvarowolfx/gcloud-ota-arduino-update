@@ -33,7 +33,7 @@ jobs:
       uses: Roang-zero1/github-upload-release-artifacts-action@master
       with:
         args:
-        - .pio/build/esp32/firmware_esp32.bin
         - .pio/build/esp32/
+        # - .pio/build/esp32/firmware_esp32.bin
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
