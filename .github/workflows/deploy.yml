@@ -15,12 +15,23 @@ jobs:
         pip install platformio
     - name: Run PlatformIO
       run: platformio run
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - name: create new filename
+      id: newname
+      run: echo "::set-output name=name::.pio/build/esp32/firmware_esp32_${{steps.date.outputs.date}}.bin"
+
+
+    - name: rename binary
+      id: rename
+      run: cp .pio/build/esp32/firmware_esp32.bin ${{steps.newname.outputs.name}}
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v1
       with:
-        name: firmware_esp32.bin
-        path: .pio/build/esp32/firmware_esp32.bin
+        name: firmware_esp32_${{steps.date.outputs.date}}.bin
+        path: ${{steps.newname.outputs.name}}
 
     # - name: Create Release
     #   id: create_release
@@ -50,4 +61,4 @@ jobs:
         APPLICATION_CREDENTIALS: ${{ secrets.APPLICATION_CREDENTIALS }}
         CLI: gsutil
       with:
-        args: cp .pio/build/esp32/firmware_esp32.bin gs://remote-esp32-upload-firmwares
+        args: cp ${{steps.newname.outputs.name}} gs://remote-esp32-upload-firmwares
