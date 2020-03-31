@@ -1,6 +1,6 @@
 name: PlatformIO CI
 
-on: [push]
+on: [release]
 
 jobs:
   build:
@@ -22,10 +22,9 @@ jobs:
       with:
         name: firmware_esp32.bin
         path: .pio/build/esp32/firmware_esp32.bin
-    - name: Upload the artifacts
-      uses: skx/github-action-publish-binaries@master
+    - name: Upload to release
+      uses: JasonEtco/upload-to-release@master
+      with:
+        args: .pio/build/esp32/firmware_esp32.bin
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        args: 'example-*'
-        
