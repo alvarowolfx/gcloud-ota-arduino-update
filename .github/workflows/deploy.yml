@@ -1,6 +1,6 @@
 name: PlatformIO CI
 
-on: [release]
+on: push
 
 jobs:
   build:
@@ -22,9 +22,21 @@ jobs:
       with:
         name: firmware_esp32.bin
         path: .pio/build/esp32/firmware_esp32.bin
-    - name: Upload to release
-      uses: JasonEtco/upload-to-release@master
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+    - uses: actions/checkout@master
+    - name: Create release
+      uses: Roang-zero1/github-create-release-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create GitHub release
+      uses: Roang-zero1/github-upload-release-artifacts-action@master
       with:
-        args: .pio/build/esp32/firmware_esp32.bin application/octet-stream
+        args:
+        - .pio/build/esp32/firmware_esp32.bin
+        - .pio/build/esp32/
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
