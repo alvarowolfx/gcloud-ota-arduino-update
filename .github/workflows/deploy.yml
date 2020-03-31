@@ -43,3 +43,11 @@ jobs:
         asset_path: .pio/build/esp32/firmware_esp32.bin
         asset_name: firmware_esp32.bin
         asset_content_type: application/octet-stream
+
+    - uses: actions-hub/gcloud@master
+      env:
+        PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
+        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        CLI: gsutil
+      with:
+        args: cp .pio/build/esp32/firmware_esp32.bin gs://remote-esp32-upload-firmwares
