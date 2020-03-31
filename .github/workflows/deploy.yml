@@ -25,7 +25,6 @@ jobs:
 
     - name: Release
       uses: fnkr/github-action-ghr@v1
-      if: startsWith(github.ref, 'refs/tags/')
       env:
         GHR_PATH: .pio/build/esp32/firmware_esp32.bin
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
