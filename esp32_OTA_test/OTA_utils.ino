@@ -19,7 +19,7 @@ void getBinName(){
 			return;
 		};
 
-		latestBin = doc.FirstChildElement( "ListBucketResult" )->FirstChildElement( "Contents" )->FirstChildElement( "Key" )->GetText();
+		latestBin = doc.FirstChildElement( "ListBucketResult" )->LastChildElement( "Contents" )->FirstChildElement( "Key" )->GetText();
 		Serial.println(latestBin);
 
 	}else {

@@ -56,9 +56,8 @@ void setup() {
 	Serial.println("Connected to " + String(SSID));
 
 	// Execute OTA Update
-	// execOTA();
-
 	getBinName();
+	execOTA();
 }
 
 void loop() {
