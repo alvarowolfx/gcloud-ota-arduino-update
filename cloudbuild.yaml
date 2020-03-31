@@ -1,8 +1,8 @@
 steps:
-- name: 'sglahn/platformio-core:latest'  
+- name: 'roju/docker-platformio-core:latest'
   dir: .
-  args: ['run']  
-artifacts: 
-  objects: 
-    location: 'gs://$PROJECT_ID-firmwares/$TAG_NAME'
+  args: ['run']
+artifacts:
+  objects:
+    location: 'gs://remote-esp32-upload-firmwares/$TAG_NAME'
     paths: ['/workspace/.pioenvs/esp32/firmware_esp32.bin','/workspace/.pioenvs/esp8266/firmware_esp8266.bin']
