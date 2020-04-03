@@ -34,7 +34,12 @@ This repo offers two different ways to compile and upload the compiled binary to
 ### editing the Arduino code
 - the main arduino code is in the folder ESP32_OTA_test
 - make sure you set the correct wifi credentials otherwise the board won't be able to connect to the server and check for updates.
-- if you change the folder and arduino name, make sure you make chages to the platformio.ini file 
+- if you change the folder and arduino name, make sure you make chages to the platformio.ini file
+
+### TODO:
+- store name of the last file used to the flash so that update is done only when a new sketch is loaded to the server
+- creare a routine to check for updates at regular interval
+
 
 ### References
 * highly inspired by https://medium.com/google-cloud/serverless-continuous-integration-and-ota-update-flow-using-google-cloud-build-and-arduino-d5e1cda504bf
