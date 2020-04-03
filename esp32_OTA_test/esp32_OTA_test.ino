@@ -7,8 +7,6 @@
 #include <tinyxml2.h>
 using namespace tinyxml2;
 
-
-
 WiFiClient client;
 HTTPClient http;
 
@@ -40,20 +38,7 @@ void setup() {
 	Serial.begin(115200);
 	delay(10);
 
-	Serial.println("Connecting to " + String(SSID));
-
-	// Connect to provided SSID and PSWD
-	WiFi.begin(SSID, PSWD);
-
-	// Wait for connection to establish
-	while (WiFi.status() != WL_CONNECTED) {
-		Serial.print(".");   // Keep the serial monitor lit!
-		delay(500);
-	}
-
-	// Connection Succeed
-	Serial.println("");
-	Serial.println("Connected to " + String(SSID));
+	connectToWifi();
 
 	// Execute OTA Update
 	getBinName();

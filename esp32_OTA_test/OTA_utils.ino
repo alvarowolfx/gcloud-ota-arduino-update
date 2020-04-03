@@ -1,5 +1,23 @@
 const char* payload;
 
+void connectToWifi(){
+	Serial.println("Connecting to " + String(SSID));
+
+	// Connect to provided SSID and PSWD
+	WiFi.begin(SSID, PSWD);
+
+	// Wait for connection to establish
+	while (WiFi.status() != WL_CONNECTED) {
+		Serial.print(".");   // Keep the serial monitor lit!
+		delay(500);
+	}
+
+	// Connection Succeed
+	Serial.println("");
+	Serial.println("Connected to " + String(SSID));
+
+}
+
 void getBinName(){
 	http.begin("http://storage.googleapis.com/remote-esp32-upload-firmwares/");  //Specify the URL
 	int httpCode = http.GET();                                         //Make the request
