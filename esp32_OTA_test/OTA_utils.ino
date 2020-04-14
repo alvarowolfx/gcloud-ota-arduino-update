@@ -192,6 +192,7 @@ void execOTA() {
 	Serial.println(" to EEPROM ");
 
 	EEPROM.put( eeAddress, lastFirmwareUploaded );
+	EEPROM.commit();
 
 	//Serial.print("written "+latestBin+" to eeprom");
 
