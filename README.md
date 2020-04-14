@@ -26,7 +26,7 @@ This repo offers two different ways to compile and upload the compiled binary to
 - just commit and push your code to the repo, this will trigger the all workflow
 
 ### Compile using the offline mode
-- from the project root folder run the compile and upload script `./script/compileAndUpload.sh`
+- from the project root folder run the compile and upload script `./scripts/compileAndUpload.sh`
 
 ### Check that the binary was uploaded correctly
 - Visit the bucket url https://storage.googleapis.com/remote-esp32-upload-firmwares/
@@ -36,10 +36,9 @@ This repo offers two different ways to compile and upload the compiled binary to
 - make sure you set the correct wifi credentials otherwise the board won't be able to connect to the server and check for updates.
 - if you change the folder and arduino name, make sure you make chages to the platformio.ini file
 
-### TODO:
-- store name of the last file used to the flash so that update is done only when a new sketch is loaded to the server
-- creare a routine to check for updates at regular interval
-
+### WARNING
+- the bucke I configured automatically deletes uploaded binary files after 2 days
+- to limit the amount of result in the query when looking for new files I'm filtering the binary based on the hour of creation; It might happen that if you run the deployment script at 12.59, the arduinos won't see the new file it and you have to run this again. 
 
 ### References
 * highly inspired by https://medium.com/google-cloud/serverless-continuous-integration-and-ota-update-flow-using-google-cloud-build-and-arduino-d5e1cda504bf

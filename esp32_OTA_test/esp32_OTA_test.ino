@@ -16,7 +16,8 @@ WiFiUDP ntpUDP;
 
 
 #include <NTPClient.h>
-NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
+//configuring this to get the utc time
+NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 0, 60000);
 
 #include <EEPROM.h>
 

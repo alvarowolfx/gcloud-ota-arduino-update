@@ -1,8 +1,10 @@
 void checkNewFirmware(){
 	if (millis()-lastCheckedFirmwaresTime>checkNewFirmwareInterval) {
 		// Execute OTA Update
+		Serial.println("checking for new firmware");
 		getBinName();
-		if (lastFirmwareUploaded!=latestBin.c_str()) {
+
+		if (strcmp(lastFirmwareUploaded,latestBin.c_str())!=0) {
 			//only perform the ota update if the latest bin name found on the server is different from the one we already flashed (the bin name is stored in the eeprom)
 			Serial.println("Starting firmware update procedure");
 			execOTA();
@@ -44,7 +46,11 @@ String getDateString() {
 	uint8_t day = ti->tm_mday;
 	String dayStr = day < 10 ? "0" + String(day) : String(day);
 
-	return yearStr + "-" + monthStr + "-" + dayStr;
+	uint8_t hours = ti->tm_hour;
+	String hoursStr = hours < 10 ? "0" + String(hours) : String(hours);
+
+	//I'm adding also the hours to make the query even more specic and stay within the specified json buffer.
+	return yearStr + "-" + monthStr + "-" + dayStr+"_"+hours;
 }
 
 static String bucketName="remote-esp32-upload-firmwares";
