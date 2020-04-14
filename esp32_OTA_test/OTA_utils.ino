@@ -1,4 +1,17 @@
-const char* payload;
+void checkNewFirmware(){
+	if (millis()-lastCheckedFirmwaresTime>checkNewFirmwareInterval) {
+		// Execute OTA Update
+		getBinName();
+		if (lastFirmwareUploaded!=latestBin) {
+			//only perform the ota update if the latest bin name found on the server is different from the one we already flashed (the bin name is stored in the eeprom)
+			Serial.println("Starting firmware update procedure");
+			execOTA();
+		}else{
+			Serial.println("I'm already runnign the latest firmware!");
+		}
+		lastCheckedFirmwaresTime=millis();
+	}
+}
 
 void connectToWifi(){
 	Serial.println("Connecting to " + String(SSID));
@@ -15,31 +28,54 @@ void connectToWifi(){
 	// Connection Succeed
 	Serial.println("");
 	Serial.println("Connected to " + String(SSID));
-
 }
 
+String getDateString() {
+	time_t rawtime = timeClient.getEpochTime();
+	struct tm * ti;
+	ti = localtime (&rawtime);
+
+	uint16_t year = ti->tm_year + 1900;
+	String yearStr = String(year);
+
+	uint8_t month = ti->tm_mon + 1;
+	String monthStr = month < 10 ? "0" + String(month) : String(month);
+
+	uint8_t day = ti->tm_mday;
+	String dayStr = day < 10 ? "0" + String(day) : String(day);
+
+	return yearStr + "-" + monthStr + "-" + dayStr;
+}
+
+static String bucketName="remote-esp32-upload-firmwares";
+static String apiEndPoint="https://storage.googleapis.com/storage/v1/b/"+bucketName+"/o";
+const char* payload;
+
 void getBinName(){
-	http.begin("http://storage.googleapis.com/remote-esp32-upload-firmwares/");  //Specify the URL
-	int httpCode = http.GET();                                         //Make the request
-	if (httpCode > 0) {   //Check for the returning code
+	String namePattern="firmware_esp32_"+getDateString();
+	//String namePattern="firmware_esp32_2020-03-31";
+	String urlParams= apiEndPoint+"?startOffset="+namePattern;
+
+	Serial.println(urlParams);
+	http.begin(urlParams);
+
+	int httpCode = http.GET();//Make the request
+	if (httpCode > 0) {     //Check for the returning code
 
 		String response=http.getString();
-		response=response.substring(38);
-
 		payload = response.c_str();
-		Serial.println(httpCode);
-		Serial.println(payload);
 
-		XMLDocument doc;
-
-		if(doc.Parse(payload)!= XML_SUCCESS) {
-			Serial.println("Error parsing");
+		// Parse JSON object
+		DeserializationError error = deserializeJson(doc, payload);
+		if (error) {
+			Serial.print(F("deserializeJson() failed: "));
+			Serial.println(error.c_str());
 			return;
-		};
-
-		latestBin = doc.FirstChildElement( "ListBucketResult" )->LastChildElement( "Contents" )->FirstChildElement( "Key" )->GetText();
-		Serial.println(latestBin);
-
+		}else{
+			int arraylength=doc["items"].size();
+			String name= doc["items"][arraylength-1]["name"];
+			latestBin=name;
+		}
 	}else {
 		Serial.println("Error on HTTP request");
 	}
@@ -49,6 +85,8 @@ void getBinName(){
 
 // OTA Logic
 void execOTA() {
+
+
 	Serial.println("Connecting to: " + String(host));
 	// Connect to S3
 	if (client.connect(host.c_str(), port)) {
@@ -146,6 +184,9 @@ void execOTA() {
 
 	// Check what is the contentLength and if content type is `application/octet-stream`
 	Serial.println("contentLength : " + String(contentLength) + ", isValidContentType : " + String(isValidContentType));
+
+	lastFirmwareUploaded=latestBin;
+	EEPROM.put( eeAddress, lastFirmwareUploaded );
 
 	// check contentLength and content type
 	if (contentLength && isValidContentType) {
