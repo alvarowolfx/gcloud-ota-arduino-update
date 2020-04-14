@@ -20,7 +20,6 @@ NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
 #include <EEPROM.h>
 
-
 // Variables to validate
 // response from S3
 long contentLength = 0;
@@ -58,6 +57,13 @@ void setup() {
 
 	connectToWifi();
 	timeClient.begin();
+
+	if (!EEPROM.begin(1000)) {
+		Serial.println("Failed to initialise EEPROM");
+		Serial.println("Restarting...");
+		delay(1000);
+		ESP.restart();
+	}
 
 	EEPROM.get( eeAddress, lastFirmwareUploaded );
 	Serial.print("I'm running firmware: ");
