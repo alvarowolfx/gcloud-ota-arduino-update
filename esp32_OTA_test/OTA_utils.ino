@@ -2,7 +2,7 @@ void checkNewFirmware(){
 	if (millis()-lastCheckedFirmwaresTime>checkNewFirmwareInterval) {
 		// Execute OTA Update
 		getBinName();
-		if (lastFirmwareUploaded!=latestBin) {
+		if (lastFirmwareUploaded!=latestBin.c_str()) {
 			//only perform the ota update if the latest bin name found on the server is different from the one we already flashed (the bin name is stored in the eeprom)
 			Serial.println("Starting firmware update procedure");
 			execOTA();
@@ -185,8 +185,16 @@ void execOTA() {
 	// Check what is the contentLength and if content type is `application/octet-stream`
 	Serial.println("contentLength : " + String(contentLength) + ", isValidContentType : " + String(isValidContentType));
 
-	lastFirmwareUploaded=latestBin;
+	//to copy the name of latestBin to lastFirmwareUploaded which is a char[] I need to use strcopy as this "lastFirmwareUploaded=latestBin.c_str();" doesn't work.
+	strcpy (lastFirmwareUploaded, latestBin.c_str());
+	Serial.print("writing ");
+	Serial.print( lastFirmwareUploaded);
+	Serial.println(" to EEPROM ");
+
 	EEPROM.put( eeAddress, lastFirmwareUploaded );
+
+	//Serial.print("written "+latestBin+" to eeprom");
+
 
 	// check contentLength and content type
 	if (contentLength && isValidContentType) {

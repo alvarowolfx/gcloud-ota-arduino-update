@@ -43,7 +43,7 @@ String host = "storage.googleapis.com"; // Host => bucket-name.s3.region.amazona
 int port = 80; // Non https. For HTTPS 443. As of today, HTTPS doesn't work.
 String binFolder = "/remote-esp32-upload-firmwares/"; // bin file name with a slash in front.
 String latestBin;
-String lastFirmwareUploaded;
+char lastFirmwareUploaded[40];
 int eeAddress = 0; //EEPROM address to start reading from
 
 // Utility to extract header value from headers
@@ -60,6 +60,7 @@ void setup() {
 	timeClient.begin();
 
 	EEPROM.get( eeAddress, lastFirmwareUploaded );
+	Serial.print("I'm running firmware: ");
 	Serial.println(lastFirmwareUploaded);
 }
 
