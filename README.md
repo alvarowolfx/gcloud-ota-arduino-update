@@ -31,14 +31,23 @@ This repo offers two different ways to compile and upload the compiled binary to
 ### Check that the binary was uploaded correctly
 - Visit the bucket url https://storage.googleapis.com/remote-esp32-upload-firmwares/
 
+### Setup PlatformIO
+- after installing the platform io ide plugin for vscode or atom install the platformio [shell commands](https://docs.platformio.org/en/latest/core/installation.html#install-shell-commands)
+- open the terminal and add this line export `PATH=$PATH:~/.platformio/penv/bin` to your `~/.bash_profile`
+```sudo nano ~/.bash_profile```
+- after restarting the editor you should be able to use platformio from command line.
+- manually install the this two libraries from the command line (needed because of [this](https://docs.platformio.org/en/latest/integration/ide/vscode.html#platformio-ide-usedevelopmentpiocore) known bug ):
+```platformio lib install NTPClient@3.1.0```
+```platformio lib install ArduinoJson@6.15.1```
+
 ### editing the Arduino code
 - the main arduino code is in the folder ESP32_OTA_test
 - make sure you set the correct wifi credentials otherwise the board won't be able to connect to the server and check for updates.
 - if you change the folder and arduino name, make sure you make chages to the platformio.ini file
 
 ### WARNING
-- the bucke I configured automatically deletes uploaded binary files after 2 days
-- to limit the amount of result in the query when looking for new files I'm filtering the binary based on the hour of creation; It might happen that if you run the deployment script at 12.59, the arduinos won't see the new file it and you have to run this again. 
+- the bucket I configured automatically deletes uploaded binary files after 2 days
+- to limit the amount of result in the query when looking for new files I'm filtering the binary based on the hour of creation; It might happen that if you run the deployment script at 12.59, the arduinos won't see the new file it and you have to run this again.
 
 ### References
 * highly inspired by https://medium.com/google-cloud/serverless-continuous-integration-and-ota-update-flow-using-google-cloud-build-and-arduino-d5e1cda504bf
