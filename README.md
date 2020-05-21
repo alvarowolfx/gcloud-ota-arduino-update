@@ -18,6 +18,7 @@ This repo offers two different ways to compile and upload the compiled binary to
 ### Setup offline compilation mode + remote deployment:
  - clone the repo
  - cd to inside the repo folder
+ - install virtualenvironment `./scripts/setupVenv.sh`
  - setup the venv by running `./scripts/setupVenv.sh` this will create a python venv in the root of the project and install the needed dependencies
  - setup google cloud bucket and configure authentication as described [here](https://pypi.org/project/google-cloud-storage/)
  - download the authentication key in json format, rename it as auth.json and move it to the scripts folder.
