@@ -1,8 +1,15 @@
 steps:
-- name: 'sglahn/platformio-core:latest'  
-  dir: .
-  args: ['run']  
-artifacts: 
-  objects: 
+  - name: python
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        pip install --upgrade platformio
+        pio run
+    dir: .
+artifacts:
+  objects:
     location: 'gs://$PROJECT_ID-firmwares/$TAG_NAME'
-    paths: ['/workspace/.pioenvs/esp32/firmware_esp32.bin','/workspace/.pioenvs/esp8266/firmware_esp8266.bin']
+    paths:
+      - /workspace/.pio/build/esp32/firmware_esp32.bin
+      - /workspace/.pio/build/esp8266/firmware_esp8266.bin
