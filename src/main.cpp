@@ -58,7 +58,9 @@ String getDownloadUrl()
       String payload = http.getString();
       USE_SERIAL.println(payload);
       downloadUrl = payload;
-    } else {
+    }
+    else
+    {
       USE_SERIAL.println("Device is up to date!");
     }
   }
@@ -164,14 +166,15 @@ bool downloadUpdate(String url)
 /* 
  * Show current device version
  */
-void handleRoot() {  
+void handleRoot()
+{
   server.send(200, "text/plain", "v" + String(CURRENT_VERSION));
 }
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.setDebugOutput(true);  
+  Serial.setDebugOutput(true);
   pinMode(LED_BUILTIN, OUTPUT);
 
   delay(3000);
@@ -179,18 +182,19 @@ void setup()
   // Setup Wifi Manager
   String version = String("<p>Current Version - v") + String(CURRENT_VERSION) + String("</p>");
   USE_SERIAL.println(version);
-  
+
   WiFiManager wm;
   WiFiManagerParameter versionText(version.c_str());
-  wm.addParameter(&versionText);    
-    
-  if (!wm.autoConnect()) {
+  wm.addParameter(&versionText);
+
+  if (!wm.autoConnect())
+  {
     Serial.println("failed to connect and hit timeout");
     //reset and try again, or maybe put it to deep sleep
     ESP.restart();
     delay(1000);
   }
- 
+
   // Check if we need to download a new version
   String downloadUrl = getDownloadUrl();
   if (downloadUrl.length() > 0)
@@ -219,12 +223,13 @@ void loop()
 
   unsigned long currentMillis = millis();
 
-  if (currentMillis - previousMillis >= interval) {    
+  if (currentMillis - previousMillis >= interval)
+  {
     previousMillis = currentMillis;
     ledState = ledState == LOW ? HIGH : LOW;
-    digitalWrite( BUILTIN_LED, ledState );
+    digitalWrite(BUILTIN_LED, ledState);
   }
-  
+
   // Just chill
   server.handleClient();
 }
